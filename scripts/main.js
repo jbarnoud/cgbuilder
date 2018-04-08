@@ -54,11 +54,14 @@ class BeadCollection {
     constructor () {
         this._beads = [];
         this._current = null;
+        this._largestIndex = -1;
         this.newBead();
     }
 
     newBead () {
         var bead = new Bead();
+        this._largestIndex += 1;
+        bead.name = 'BEAD' + this._largestIndex;
         this._beads.push(bead);
         this._current = bead;
         return bead;
@@ -102,6 +105,7 @@ class Vizualization {
 	}
 
 	onNewBead(event) {
+	    this.createBeadListItem(this.currentBead);
 	    this.collection.newBead();
 	    this.updateSelection();
 	}
@@ -123,6 +127,23 @@ class Vizualization {
     updateSelection() {
         var selString = this.selectionString(this.currentBead);
         this.representation.setSelection(selString);
+    }
+
+    createBeadListItem(bead) {
+        var text = bead.name + ': ';
+	    if (bead.atoms.length > 0) {
+            for (var i=0; i < bead.atoms.length; i++) {
+                if (i != 0) {
+                    text += ', ';
+                }
+                text += bead.atoms[i].atomname;
+            }
+        }
+        var list = document.getElementById("bead-list");
+        var item = document.createElement("li");
+        var textNode = document.createTextNode(text);
+        item.appendChild(textNode);
+        list.appendChild(item);
     }
 }
 
