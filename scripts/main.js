@@ -4,10 +4,36 @@ class Bead {
 		this.atoms = [];
 	}
 
+	indexOf(atom) {
+	    if (this.atoms.length > 0) {
+            for (var i=0; i < this.atoms.length; i++) {
+                if (this.atoms[i].index == atom.index) {
+                    return i;
+                }
+            }
+        }
+		return -1;
+	}
+
 	addAtom(atom) {
 		if (!this.isAtomIn(atom)) {
 			this.atoms.push(atom);
 		}
+	}
+
+	removeAtom(atom) {
+	    var atomIndex = this.indexOf(atom);
+	    if (atomIndex >= 0) {
+	        this.atoms.splice(atomIndex, 1);
+	    }
+	}
+
+	toggleAtom(atom) {
+	    if (this.isAtomIn(atom)) {
+	        this.removeAtom(atom);
+	    } else {
+	        this.addAtom(atom);
+	    }
 	}
 
 	set name(name) {
@@ -19,12 +45,7 @@ class Bead {
 	}
 
 	isAtomIn(atom) {
-		for (var i=0; i < this.atoms.length; i++) {
-			if (this.atoms[i].index == atom.index) {
-				return true;
-			}
-		}
-		return false;
+		return this.indexOf(atom) >= 0;
 	}
 
 	get selectionString() {
@@ -37,9 +58,8 @@ class Bead {
                 sel = sel + this.atoms[i].index;
             }
             return sel;
-        } else {
-            return "";
         }
+        return "not all";
     }
 }
 
@@ -82,10 +102,9 @@ function main() {
     stage.signals.clicked.add(function (pickingProxy) {
     	// pickingProxy is only defined if the click is on an atom.
     	//We do not want to do anything if tere is no atom selected.
-    	if (pickingProxy) {
-			currentBead.addAtom(pickingProxy.atom);
+    	if (pickingProxy && pickingProxy.atom) {
+			currentBead.toggleAtom(pickingProxy.atom);
 			currentRepresentation.setSelection(currentBead.selectionString);
-			console.log(currentBead.atoms.length);
 		}
     });
 }
