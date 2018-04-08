@@ -11,7 +11,8 @@ function main() {
     var beads = [];
 
     // Load PDB entry 1CRN
-    stage.loadFile( "rcsb://1crn", { defaultRepresentation: true } );
+    //stage.loadFile( "rcsb://1crn", { defaultRepresentation: true } );
+	stage.loadFile("data/benzene_atb.pdb", { defaultRepresentation: true } );
     stage.signals.clicked.add(function (pickingProxy) {
         beads.push(pickingProxy.atom); console.log(beads.length)
     });

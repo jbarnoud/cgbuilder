@@ -1,0 +1,29 @@
+HEADER    UNCLASSIFIED                            22-Mar-18
+TITLE     ALL ATOM STRUCTURE FOR MOLECULE UNK                                   
+AUTHOR    GROMOS AUTOMATIC TOPOLOGY BUILDER REVISION 2018-03-21 09:35:17
+AUTHOR   2  http://compbio.biosci.uq.edu.au/atb
+HETATM    1   H1 GGZZ    0      -2.370   0.749   0.000  1.00  0.00           H
+HETATM    2   C2 GGZZ    0      -1.333   0.421  -0.000  1.00  0.00           C
+HETATM    3  C11 GGZZ    0      -0.302   1.365  -0.002  1.00  0.00           C
+HETATM    4  H12 GGZZ    0      -0.536   2.427   0.001  1.00  0.00           H
+HETATM    5   C3 GGZZ    0      -1.031  -0.944   0.002  1.00  0.00           C
+HETATM    6   H4 GGZZ    0      -1.834  -1.678  -0.001  1.00  0.00           H
+HETATM    7   C5 GGZZ    0       0.302  -1.365   0.002  1.00  0.00           C
+HETATM    8   H6 GGZZ    0       0.536  -2.427  -0.001  1.00  0.00           H
+HETATM    9   C7 GGZZ    0       1.333  -0.421   0.000  1.00  0.00           C
+HETATM   10   H8 GGZZ    0       2.370  -0.749  -0.000  1.00  0.00           H
+HETATM   11   C9 GGZZ    0       1.031   0.944  -0.002  1.00  0.00           C
+HETATM   12  H10 GGZZ    0       1.834   1.678   0.001  1.00  0.00           H
+CONECT    1    2
+CONECT    2    1    3    5
+CONECT    3    2    4   11
+CONECT    4    3
+CONECT    5    2    6    7
+CONECT    6    5
+CONECT    7    5    8    9
+CONECT    8    7
+CONECT    9    7   10   11
+CONECT   10    9
+CONECT   11    3    9   12
+CONECT   12   11
+END
