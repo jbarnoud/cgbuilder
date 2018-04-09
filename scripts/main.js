@@ -333,11 +333,36 @@ function generateMap(collection) {
 }
 
 
-function main() {
-    collection = new BeadCollection();
-    //var collection = new BeadCollection();
+function loadMolecule(event, stage) {
+    // Clear the stage if needed
+    stage.removeAllComponents();
+    stage.signals.clicked.removeAll();
+    // Setup the model
+    var collection = new BeadCollection();
+    // Setup the interface
     var vizu = new Vizualization(collection);
+    // Load the molecule
+    var input = event.target.files[0]
+	stage.loadFile(input).then(function (component) {
+	    component.addRepresentation("ball+stick");
+	    component.autoView();
+	    vizu.attachRepresentation(component);
+	    vizu.updateSelection();
+	});
+    // Bing the new bead buttons.
+    var buttons = document.getElementsByClassName("new-bead");
+    for (button of buttons) {
+        button.onclick = (event) => vizu.onNewBead(event);
+        button.disabled = false;
+    }
+	// Bind our own selection beheviour.
+    // We need to use the "arrow" function so that `this` is defined and refer
+    // to the right object in the `onClick` method. See
+    // <https://stackoverflow.com/questions/20279484/how-to-access-the-correct-this-inside-a-callback>.
+    stage.signals.clicked.add((pickingProxy) => vizu.onClick(pickingProxy));
+}
 
+function main() {
     // Create NGL Stage object
     var stage = new NGL.Stage( "viewport" );
 
@@ -346,29 +371,18 @@ function main() {
         stage.handleResize();
     }, false );
 
-    // Load PDB
-	stage.loadFile("data/benzene_atb.pdb").then(function (component) {
-	    component.addRepresentation("ball+stick");
-	    component.autoView();
-	    vizu.attachRepresentation(component);
-	    vizu.updateSelection();
-	});
+	var mol_select = document.getElementById("mol-select");
+	mol_select.onchange = (event) => loadMolecule(event, stage);
 	
 	// Remove preset action on atom pick.
 	// As of NGL v2.0.0-dev.11, the left click atom pick is binded to the
 	// centering of the view on the selected atom. In previous versions, this
 	// behavior was linked on shift-click, instead.
 	stage.mouseControls.remove("clickPick-left");
-	// Bind our own selection beheviour.
-    // We need to use the "arrow" function so that `this` is defined and refer
-    // to the right object in the `onClick` method. See
-    // <https://stackoverflow.com/questions/20279484/how-to-access-the-correct-this-inside-a-callback>.
-    stage.signals.clicked.add((pickingProxy) => vizu.onClick(pickingProxy));
 
-    // Bing the new bead buttons.
     var buttons = document.getElementsByClassName("new-bead");
     for (button of buttons) {
-        button.onclick = (event) => vizu.onNewBead(event);
+        button.disabled = true;
     }
 }
 

@@ -13,7 +13,11 @@
 	<div id="viewport"></div>
 </div>
 <div id="beadlist">
-    <button class="new-bead">New bead</button>
+    <form>
+        <label for="files" class="btn">Load molecule</label>
+        <input id="mol-select" type="file" name="files" accept=".pdb,.cif,.ent,.gz,.gro"></input>
+    </form>
+    <button class="new-bead" disabled>New bead</button>
     <ul id="bead-list"></ul>
 </div>
 <div id="file-outputs">
