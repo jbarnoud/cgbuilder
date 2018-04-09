@@ -67,6 +67,10 @@ class BeadCollection {
         return bead;
     }
 
+    removeBead(index) {
+        this._beads.splice(index, 1);
+    }
+
     get currentBead() {
         return this._current;
     }
@@ -131,6 +135,26 @@ class Vizualization {
         this.updateSelection();
 	}
 
+	onBeadRemove(event) {
+        var realTarget = findParentWithClass(event.target, "bead-view");
+        var nodes = document.getElementById("bead-list").childNodes;
+        var index = 0;
+        var child;
+        var selected = -1;
+        for (child of nodes) {
+            if (child === realTarget) {
+                selected = index;
+                break;
+            }
+            index += 1;
+        }
+        if (selected >= 0) {
+            this.collection.removeBead(selected);
+        }
+        this.updateSelection();
+    }
+
+
 	selectionString(bead) {
         if (bead.atoms.length > 0) {
             var sel = "@";
@@ -155,8 +179,16 @@ class Vizualization {
     }
 
     createBeadListItem(bead) {
+        var textNode;
         var list = document.getElementById("bead-list");
         var item = document.createElement("li");
+
+        var removeNode = document.createElement("button");
+        textNode = document.createTextNode("X");
+        removeNode.appendChild(textNode);
+        removeNode.onclick = (event) => this.onBeadRemove(event);
+        item.appendChild(removeNode);
+
         var nameNode = document.createElement("p");
         var textNode = document.createTextNode(bead.name);
         nameNode.appendChild(textNode);
