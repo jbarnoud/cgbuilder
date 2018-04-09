@@ -70,6 +70,10 @@ class BeadCollection {
     get currentBead() {
         return this._current;
     }
+
+    get beads() {
+        return this._beads;
+    }
 }
 
 
@@ -105,7 +109,6 @@ class Vizualization {
 	}
 
 	onNewBead(event) {
-	    this.createBeadListItem(this.currentBead);
 	    this.collection.newBead();
 	    this.updateSelection();
 	}
@@ -127,23 +130,42 @@ class Vizualization {
     updateSelection() {
         var selString = this.selectionString(this.currentBead);
         this.representation.setSelection(selString);
+        this.clearBeadList();
+        this.createBeadList();
     }
 
     createBeadListItem(bead) {
-        var text = bead.name + ': ';
-	    if (bead.atoms.length > 0) {
-            for (var i=0; i < bead.atoms.length; i++) {
-                if (i != 0) {
-                    text += ', ';
-                }
-                text += bead.atoms[i].atomname;
-            }
-        }
         var list = document.getElementById("bead-list");
         var item = document.createElement("li");
-        var textNode = document.createTextNode(text);
-        item.appendChild(textNode);
+        var nameNode = document.createElement("p");
+        var textNode = document.createTextNode(bead.name);
+        nameNode.appendChild(textNode);
+        var nameList = document.createElement("ul");
+        var subitem;
+        if (bead.atoms.length > 0) {
+            for (var i=0; i < bead.atoms.length; i++) {
+                subitem = document.createElement("li");
+                textNode = document.createTextNode(bead.atoms[i].atomname);
+                subitem.appendChild(textNode);
+                nameList.appendChild(subitem);
+            }
+        }
+        item.appendChild(nameNode);
+        item.appendChild(nameList);
         list.appendChild(item);
+    }
+
+    createBeadList() {
+        for (var bead of this.collection.beads) {
+            this.createBeadListItem(bead);
+        }
+    }
+
+    clearBeadList() {
+        var list = document.getElementById('bead-list');
+        while (list.lastChild) {
+            list.removeChild(list.lastChild);
+        }
     }
 }
 
