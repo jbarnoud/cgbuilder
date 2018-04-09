@@ -74,6 +74,10 @@ class BeadCollection {
     get beads() {
         return this._beads;
     }
+
+    selectBead(index) {
+        this._current = this._beads[index];
+    }
 }
 
 
@@ -111,6 +115,20 @@ class Vizualization {
 	onNewBead(event) {
 	    this.collection.newBead();
 	    this.updateSelection();
+	}
+
+	onBeadSelected(event) {
+	    var realTarget = findParentWithClass(event.target, "bead-view");
+        var nodes = document.getElementById("bead-list").childNodes;
+        var index = 0;
+        var child;
+        for (child of nodes) {
+            if (child === realTarget) {
+                this.collection.selectBead(index);
+            }
+            index += 1;
+        }
+        this.updateSelection();
 	}
 
 	selectionString(bead) {
@@ -152,6 +170,11 @@ class Vizualization {
         }
         item.appendChild(nameNode);
         item.appendChild(nameList);
+        item.onclick = (event) => this.onBeadSelected(event);
+        item.classList.add("bead-view");
+        if (bead === this.currentBead) {
+            item.classList.add("selected-bead");
+        }
         list.appendChild(item);
     }
 
@@ -167,6 +190,18 @@ class Vizualization {
             list.removeChild(list.lastChild);
         }
     }
+}
+
+
+function findParentWithClass(element, className) {
+    var node = element;
+    while (node) {
+        if (node.classList.contains(className)) {
+            return node;
+        }
+        node = node.parentElement;
+    }
+    return null;
 }
 
 
