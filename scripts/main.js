@@ -152,7 +152,14 @@ class Vizualization {
         }
         if (selected >= 0) {
             this.collection.removeBead(selected);
+            if (this.collection.beads.length == 0) {
+                this.collection.newBead();
+            }
+            if (realTarget.classList.contains('selected-bead')) {
+                this.collection.selectBead(0);
+            }
         }
+
         this.updateSelection();
     }
 
