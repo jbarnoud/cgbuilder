@@ -9,7 +9,7 @@ body {
     grid-template-columns: auto auto;
 }
 #structview {
-    height: 100%;
+    height: 70vh;
     width: 100%;
 }
 #viewport {

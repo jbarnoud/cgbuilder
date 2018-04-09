@@ -150,6 +150,7 @@ class Vizualization {
         this.representation.setSelection(selString);
         this.clearBeadList();
         this.createBeadList();
+        this.updateNDX();
     }
 
     createBeadListItem(bead) {
@@ -190,6 +191,11 @@ class Vizualization {
             list.removeChild(list.lastChild);
         }
     }
+
+    updateNDX() {
+        var displayNode = document.getElementById('ndx-output');
+        displayNode.textContent = generateNDX(this.collection);
+    }
 }
 
 
@@ -205,8 +211,22 @@ function findParentWithClass(element, className) {
 }
 
 
+function generateNDX(collection) {
+    var ndx = "";
+    for (bead of collection.beads) {
+        ndx += "[ " + bead.name + " ]\n";
+        for (atom of bead.atoms) {
+            ndx += (atom.index + 1) + " ";
+        }
+        ndx += "\n\n";
+    }
+    return ndx;
+}
+
+
 function main() {
-    var collection = new BeadCollection();
+    collection = new BeadCollection();
+    //var collection = new BeadCollection();
     var vizu = new Vizualization(collection);
 
     // Create NGL Stage object
