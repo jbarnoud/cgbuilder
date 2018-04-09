@@ -1,12 +1,6 @@
-* { margin: 0; padding: 0; }
-html, body {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-}
 body {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 60vw auto;
 }
 #structview {
     height: 70vh;
@@ -16,6 +10,30 @@ body {
 	height: 100%;
 	width: 100%;
 }
+#beadlist {
+	padding: 0.5em;
+	height: 70vh;
+	overflow: hidden;
+}
+#bead-list {
+	overflow-y:  scroll;
+	height: 100%;
+}
+.bead-view {
+	margin: 0.5em;
+	padding: 0.5em;
+	border: 1px solid;
+}
 .selected-bead {
     background-color: #41d6f4;
+}
+#file-outputs {
+	grid-column-start: 1;
+	grid-column-end: 3;
+}
+
+#file-outputs pre {
+	border: 1px solid;
+	/*margin: 1em;*/
+	padding: 1em;
 }
