@@ -5,6 +5,8 @@ body {
 #structview {
     height: 70vh;
     width: 100%;
+    grid-row-start: 1;
+    grid-row-end: 3;
 }
 #viewport {
 	height: 100%;
@@ -14,6 +16,10 @@ body {
 	padding: 0.5em;
 	height: 70vh;
 	overflow: hidden;
+	grid-row-start: 2;
+	grid-row-end: 3;
+    grid-column-start: 2;
+	grid-column-end: 3;
 }
 #bead-list {
 	overflow-y:  scroll;
@@ -36,4 +42,8 @@ body {
 	border: 1px solid;
 	/*margin: 1em;*/
 	padding: 1em;
+}
+#controls {
+	grid-row-start: 1;
+	grid-row-end: 2;
 }
