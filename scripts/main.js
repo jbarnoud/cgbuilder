@@ -122,17 +122,19 @@ class Vizualization {
 	}
 
 	onBeadSelected(event) {
-	    var realTarget = findParentWithClass(event.target, "bead-view");
-        var nodes = document.getElementById("bead-list").childNodes;
-        var index = 0;
-        var child;
-        for (child of nodes) {
-            if (child === realTarget) {
-                this.collection.selectBead(index);
+	    if (! event.target.classList.contains('bead-name')) {
+            var realTarget = findParentWithClass(event.target, "bead-view");
+            var nodes = document.getElementById("bead-list").childNodes;
+            var index = 0;
+            var child;
+            for (child of nodes) {
+                if (child === realTarget) {
+                    this.collection.selectBead(index);
+                }
+                index += 1;
             }
-            index += 1;
+            this.updateSelection();
         }
-        this.updateSelection();
 	}
 
 	onBeadRemove(event) {
@@ -154,6 +156,19 @@ class Vizualization {
         this.updateSelection();
     }
 
+    onNameChange(event) {
+        var realTarget = findParentWithClass(event.target, "bead-view");
+        var nodes = document.getElementById("bead-list").childNodes;
+        var index = 0;
+        var child;
+        for (child of nodes) {
+            if (child === realTarget) {
+                this.collection.beads[index].name = event.target.value;
+            }
+            index += 1;
+        }
+        this.updateName();
+    }
 
 	selectionString(bead) {
         if (bead.atoms.length > 0) {
@@ -169,13 +184,17 @@ class Vizualization {
         return "not all";
     }
 
+    updateName() {
+        this.updateNDX();
+        this.updateMap();
+    }
+
     updateSelection() {
         var selString = this.selectionString(this.currentBead);
         this.representation.setSelection(selString);
         this.clearBeadList();
         this.createBeadList();
-        this.updateNDX();
-        this.updateMap();
+        this.updateName();
     }
 
     createBeadListItem(bead) {
@@ -183,15 +202,25 @@ class Vizualization {
         var list = document.getElementById("bead-list");
         var item = document.createElement("li");
 
+        // Remove button
         var removeNode = document.createElement("button");
         textNode = document.createTextNode("X");
         removeNode.appendChild(textNode);
         removeNode.onclick = (event) => this.onBeadRemove(event);
         item.appendChild(removeNode);
 
-        var nameNode = document.createElement("p");
-        var textNode = document.createTextNode(bead.name);
-        nameNode.appendChild(textNode);
+        // Name entry
+        var formNode = document.createElement("form");
+        formNode.onsubmit = function() {return false};  // Prevent reload on "submission"
+        var nameNode = document.createElement("input");
+        nameNode.setAttribute("type", "text");
+        nameNode.setAttribute("value", bead.name);
+        nameNode.classList.add("bead-name");
+        nameNode.oninput = (event) => this.onNameChange(event);
+        formNode.appendChild(nameNode);
+        item.appendChild(formNode);
+
+        // Atom list
         var nameList = document.createElement("ul");
         var subitem;
         if (bead.atoms.length > 0) {
@@ -202,8 +231,8 @@ class Vizualization {
                 nameList.appendChild(subitem);
             }
         }
-        item.appendChild(nameNode);
         item.appendChild(nameList);
+
         item.onclick = (event) => this.onBeadSelected(event);
         item.classList.add("bead-view");
         if (bead === this.currentBead) {
