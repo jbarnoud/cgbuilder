@@ -342,7 +342,9 @@ function main() {
     // Load PDB
 	stage.loadFile("data/benzene_atb.pdb").then(function (component) {
 	    component.addRepresentation("ball+stick");
+	    component.autoView();
 	    vizu.attachRepresentation(component);
+	    vizu.updateSelection();
 	});
 	
 	// Remove preset action on atom pick.
