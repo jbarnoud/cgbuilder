@@ -107,6 +107,35 @@ class Vizualization {
 	    );
     }
 
+    attachAALabels(component) {
+        this.aa_labels = component.addRepresentation(
+            "label",
+            {
+                labelType: "atomname",
+            },
+        );
+
+        var buttons = document.getElementsByClassName("toggle-aa-labels");
+        for (button of buttons) {
+            button.disabled = false;
+            button.onclick = (event) => this.onToggleAALabels(event);
+        }
+    }
+
+    onToggleAALabels(event) {
+        var visible = ! this.aa_labels.visible;
+        this.aa_labels.setVisibility(visible);
+        if (visible) {
+            var text = 'Hide labels';
+        } else {
+            var text = 'Show labels';
+        }
+        var buttons = document.getElementsByClassName("toggle-aa-labels");
+        for (button of buttons) {
+            button.textContent = text;
+        }
+    }
+
     onClick(pickingProxy) {
     	// pickingProxy is only defined if the click is on an atom.
     	//We do not want to do anything if tere is no atom selected.
@@ -346,6 +375,7 @@ function loadMolecule(event, stage) {
 	stage.loadFile(input).then(function (component) {
 	    component.addRepresentation("ball+stick");
 	    component.autoView();
+	    vizu.attachAALabels(component);
 	    vizu.attachRepresentation(component);
 	    vizu.updateSelection();
 	});
