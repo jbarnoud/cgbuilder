@@ -47,6 +47,17 @@ class Bead {
 	isAtomIn(atom) {
 		return this.indexOf(atom) >= 0;
 	}
+
+	get center() {
+	    var mass = 0;
+	    var position = new NGL.Vector3(0, 0, 0);
+	    for (atom of this.atoms) {
+	        mass += 1;
+	        position.add(atom.positionToVector3());
+	    }
+	    position.divideScalar(mass);
+	    return position;
+	}
 }
 
 
@@ -86,9 +97,15 @@ class BeadCollection {
 
 
 class Vizualization {
-    constructor(collection) {
+    constructor(collection, stage) {
         this.collection = collection;
         this.representation = null;
+        this.stage = stage;
+        this.shapeComp = null;
+        this.showCG = false;
+        var toggleCG = document.getElementById('toggle-cg');
+        toggleCG.onclick = (event) => this.onToggleCG(event);
+        toggleCG.disabled = false;
     }
 
 	get currentBead() {
@@ -100,9 +117,9 @@ class Vizualization {
 	        "ball+stick",
 	        {
 	            sele: "not all",
-	            radiusScale: 1.5,
+	            radiusScale: 1.6,
 	            color: "#f4b642",
-	            opacity: 0.5
+	            opacity: 0.6
 	        },
 	    );
     }
@@ -120,6 +137,11 @@ class Vizualization {
             button.disabled = false;
             button.onclick = (event) => this.onToggleAALabels(event);
         }
+    }
+
+    onToggleCG(event) {
+        this.showCG = (! this.showCG);
+        this.drawCG();
     }
 
     onToggleAALabels(event) {
@@ -223,6 +245,7 @@ class Vizualization {
     updateName() {
         this.updateNDX();
         this.updateMap();
+        this.drawCG();
     }
 
     updateSelection() {
@@ -299,6 +322,31 @@ class Vizualization {
         var displayNode = document.getElementById('map-output');
         displayNode.textContent = generateMap(this.collection);
     }
+
+    drawCG() {
+        var normalColor = [0.58, 0.79, 0.66];
+        var selectedColor = [0.25, 0.84, 0.96];
+        var color = normalColor;
+        var opacity = 0.2;
+        if (this.showCG) {
+            opacity = 1;
+        }
+        if (this.shapeComp != null) {
+            this.stage.removeComponent(this.shapeComp);
+        }
+        var shape = new NGL.Shape("shape");
+        for (var bead of this.collection.beads) {
+            color = normalColor;
+            if (bead === this.currentBead) {
+                color = selectedColor;
+            }
+            if (bead.atoms.length > 0) {
+                shape.addSphere(bead.center, color, 1.12, bead.name);
+            }
+        }
+        this.shapeComp = this.stage.addComponentFromObject(shape);
+        this.shapeComp.addRepresentation("buffer", {opacity: opacity});
+    }
 }
 
 
@@ -369,7 +417,7 @@ function loadMolecule(event, stage) {
     // Setup the model
     var collection = new BeadCollection();
     // Setup the interface
-    var vizu = new Vizualization(collection);
+    var vizu = new Vizualization(collection, stage);
     // Load the molecule
     var input = event.target.files[0]
 	stage.loadFile(input).then(function (component) {
