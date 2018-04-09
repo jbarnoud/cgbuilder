@@ -151,6 +151,7 @@ class Vizualization {
         this.clearBeadList();
         this.createBeadList();
         this.updateNDX();
+        this.updateMap();
     }
 
     createBeadListItem(bead) {
@@ -196,6 +197,11 @@ class Vizualization {
         var displayNode = document.getElementById('ndx-output');
         displayNode.textContent = generateNDX(this.collection);
     }
+
+    updateMap() {
+        var displayNode = document.getElementById('map-output');
+        displayNode.textContent = generateMap(this.collection);
+    }
 }
 
 
@@ -221,6 +227,41 @@ function generateNDX(collection) {
         ndx += "\n\n";
     }
     return ndx;
+}
+
+
+function generateMap(collection) {
+    var output = "[ to ]\nmartini\n\n[ martini ]\n";
+    var atomToBeads = {};
+    var atoms = [];
+    var atomname;
+    var index;
+    for (bead of collection.beads) {
+        output += bead.name + " ";
+        for (atom of bead.atoms) {
+            atomname = atom.atomname;
+            if (!atomToBeads[atomname]) {
+                atomToBeads[atomname] = [];
+                atoms.push(atom);
+            }
+            atomToBeads[atomname].push(bead.name);
+        }
+    }
+    output += "\n\n";
+
+    output += "[ atoms ]\n";
+    index = 0;
+    atoms.sort(function(a, b) {return a.index - b.index});
+    for (atom of atoms) {
+        index += 1;
+        output += index + "\t" + atom.atomname;
+        for (bead of atomToBeads[atom.atomname]) {
+            output += "\t" + bead;
+        }
+        output += "\n";
+    }
+
+    return output;
 }
 
 
