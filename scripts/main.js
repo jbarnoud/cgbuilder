@@ -44,6 +44,20 @@ class Bead {
 		return this._name;
 	}
 
+	get resname() {
+	    if (this.atoms.length < 1) {
+	        return 'UNK';
+        }
+	    return this.atoms[0].resname;
+    }
+
+	get resid() {
+	    if (this.atoms.length < 1) {
+	        return 0;
+        }
+	    return this.atoms[0].resno;
+    }
+
 	isAtomIn(atom) {
 		return this.indexOf(atom) >= 0;
 	}
@@ -245,6 +259,7 @@ class Vizualization {
     updateName() {
         this.updateNDX();
         this.updateMap();
+        this.updateGRO();
         this.drawCG();
     }
 
@@ -321,6 +336,11 @@ class Vizualization {
     updateMap() {
         var displayNode = document.getElementById('map-output');
         displayNode.textContent = generateMap(this.collection);
+    }
+
+    updateGRO() {
+        var displayNode = document.getElementById('gro-output');
+        displayNode.textContent = generateGRO(this.collection);
     }
 
     drawCG() {
@@ -409,6 +429,33 @@ function generateMap(collection) {
     return output;
 }
 
+
+function generateGRO(collection) {
+    var resid = "    0";
+    var resname = "";
+    var atomname = "    0";
+    var atomid = 0;
+    var x;
+    var y;
+    var z;
+    var center;
+    var output = "Generated with cgbuilder\n" + collection.beads.length + "\n";
+    var counter = 0;
+    for (bead of collection.beads) {
+        counter += 1;
+        resid = new String(bead.resid).padStart(5);
+        atomid = new String(counter).padStart(5);
+        resname = bead.resname.padEnd(5);
+        atomname = bead.name.padStart(5);
+        center = bead.center;
+        x = center.x.toFixed(3).padStart(8);
+        y = center.y.toFixed(3).padStart(8);
+        z = center.z.toFixed(3).padStart(8);
+        output += resid + resname + atomname + atomid + x + y + z + '\n';
+    }
+    output += "10 10 10";
+    return output;
+}
 
 
 function loadMolecule(event, stage) {
