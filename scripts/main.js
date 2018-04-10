@@ -410,6 +410,7 @@ function generateMap(collection) {
 }
 
 
+
 function loadMolecule(event, stage) {
     // Clear the stage if needed
     stage.removeAllComponents();
