@@ -120,6 +120,12 @@ class Vizualization {
         var toggleCG = document.getElementById('toggle-cg');
         toggleCG.onclick = (event) => this.onToggleCG(event);
         toggleCG.disabled = false;
+        document.getElementById('dl-ndx').onclick = (event) => {
+            download('cgbuilder.ndx', generateNDX(this.collection))}
+        document.getElementById('dl-map').onclick = (event) => {
+            download('cgbuilder.map', generateMap(this.collection))}
+        document.getElementById('dl-gro').onclick = (event) => {
+            download('cgbuilder.gro', generateGRO(this.collection))}
     }
 
 	get currentBead() {
@@ -455,6 +461,20 @@ function generateGRO(collection) {
     }
     output += "10 10 10";
     return output;
+}
+
+/* Taken from <https://ourcodeworld.com/articles/read/189/how-to-create-a-file-and-generate-a-download-with-javascript-in-the-browser-without-a-server> */
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
 }
 
 
