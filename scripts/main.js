@@ -448,9 +448,9 @@ function generateGRO(collection) {
         resname = bead.resname.padEnd(5);
         atomname = bead.name.padStart(5);
         center = bead.center;
-        x = center.x.toFixed(3).padStart(8);
-        y = center.y.toFixed(3).padStart(8);
-        z = center.z.toFixed(3).padStart(8);
+        x = (center.x / 10).toFixed(3).padStart(8);
+        y = (center.y / 10).toFixed(3).padStart(8);
+        z = (center.z / 10).toFixed(3).padStart(8);
         output += resid + resname + atomname + atomid + x + y + z + '\n';
     }
     output += "10 10 10";
