@@ -315,10 +315,11 @@ class Vizualization {
 
         item.onclick = (event) => this.onBeadSelected(event);
         item.classList.add("bead-view");
+        list.appendChild(item);
         if (bead === this.currentBead) {
             item.classList.add("selected-bead");
+            item.scrollIntoView(false);
         }
-        list.appendChild(item);
     }
 
     createBeadList() {
