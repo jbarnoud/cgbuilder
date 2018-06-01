@@ -460,7 +460,7 @@ function generateGRO(collection) {
         z = (center.z / 10).toFixed(3).padStart(8);
         output += resid + resname + atomname + atomid + x + y + z + '\n';
     }
-    output += "10 10 10";
+    output += "10 10 10\n";
     return output;
 }
 
