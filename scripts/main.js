@@ -86,7 +86,7 @@ class BeadCollection {
     newBead () {
         var bead = new Bead();
         this._largestIndex += 1;
-        bead.name = 'BEAD' + this._largestIndex;
+        bead.name = 'B' + this._largestIndex;
         this._beads.push(bead);
         this._current = bead;
         return bead;
