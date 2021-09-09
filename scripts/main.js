@@ -449,8 +449,8 @@ function generateGRO(collection) {
     let counter = 0;
     for (const bead of collection.beads) {
         counter += 1;
-        resid = new String(bead.resid).padStart(5);
-        atomid = new String(counter).padStart(5);
+        resid = String(bead.resid).padStart(5);
+        atomid = String(counter).padStart(5);
         resname = bead.resname.padEnd(5).substring(0, 5);
         atomname = bead.name.padStart(5).substring(0, 5);
         center = bead.center;
