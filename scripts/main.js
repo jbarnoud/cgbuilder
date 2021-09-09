@@ -65,7 +65,7 @@ class Bead {
 	get center() {
 	    let mass = 0;
 	    let position = new NGL.Vector3(0, 0, 0);
-	    for (atom of this.atoms) {
+	    for (const atom of this.atoms) {
 	        mass += 1;
 	        position.add(atom.positionToVector3());
 	    }
@@ -153,7 +153,7 @@ class Vizualization {
         );
 
         let buttons = document.getElementsByClassName("toggle-aa-labels");
-        for (button of buttons) {
+        for (const button of buttons) {
             button.disabled = false;
             button.onclick = (event) => this.onToggleAALabels(event);
         }
@@ -174,7 +174,7 @@ class Vizualization {
             text = 'Show labels';
         }
         let buttons = document.getElementsByClassName("toggle-aa-labels");
-        for (button of buttons) {
+        for (const button of buttons) {
             button.textContent = text;
         }
     }
@@ -199,7 +199,7 @@ class Vizualization {
             let nodes = document.getElementById("bead-list").childNodes;
             let index = 0;
             let child;
-            for (child of nodes) {
+            for (const child of nodes) {
                 if (child === realTarget) {
                     this.collection.selectBead(index);
                 }
@@ -213,9 +213,8 @@ class Vizualization {
         let realTarget = findParentWithClass(event.target, "bead-view");
         let nodes = document.getElementById("bead-list").childNodes;
         let index = 0;
-        let child;
         let selected = -1;
-        for (child of nodes) {
+        for (const child of nodes) {
             if (child === realTarget) {
                 selected = index;
                 break;
@@ -239,8 +238,7 @@ class Vizualization {
         let realTarget = findParentWithClass(event.target, "bead-view");
         let nodes = document.getElementById("bead-list").childNodes;
         let index = 0;
-        let child;
-        for (child of nodes) {
+        for (const child of nodes) {
             if (child === realTarget) {
                 this.collection.beads[index].name = event.target.value;
             }
@@ -392,9 +390,9 @@ function findParentWithClass(element, className) {
 
 function generateNDX(collection) {
     let ndx = "";
-    for (bead of collection.beads) {
+    for (const bead of collection.beads) {
         ndx += "[ " + bead.name + " ]\n";
-        for (atom of bead.atoms) {
+        for (const atom of bead.atoms) {
             ndx += (atom.index + 1) + " ";
         }
         ndx += "\n\n";
@@ -409,9 +407,9 @@ function generateMap(collection) {
     let atoms = [];
     let atomname;
     let index;
-    for (bead of collection.beads) {
+    for (const bead of collection.beads) {
         output += bead.name + " ";
-        for (atom of bead.atoms) {
+        for (const atom of bead.atoms) {
             atomname = atom.atomname;
             if (!atomToBeads[atomname]) {
                 atomToBeads[atomname] = [];
@@ -425,10 +423,10 @@ function generateMap(collection) {
     output += "[ atoms ]\n";
     index = 0;
     atoms.sort(function(a, b) {return a.index - b.index});
-    for (atom of atoms) {
+    for (const atom of atoms) {
         index += 1;
         output += index + "\t" + atom.atomname;
-        for (bead of atomToBeads[atom.atomname]) {
+        for (const bead of atomToBeads[atom.atomname]) {
             output += "\t" + bead;
         }
         output += "\n";
@@ -449,7 +447,7 @@ function generateGRO(collection) {
     let center;
     let output = "Generated with cgbuilder\n" + collection.beads.length + "\n";
     let counter = 0;
-    for (bead of collection.beads) {
+    for (const bead of collection.beads) {
         counter += 1;
         resid = new String(bead.resid).padStart(5);
         atomid = new String(counter).padStart(5);
@@ -499,7 +497,7 @@ function loadMolecule(event, stage) {
 	});
     // Bing the new bead buttons.
     let buttons = document.getElementsByClassName("new-bead");
-    for (button of buttons) {
+    for (const button of buttons) {
         button.onclick = (event) => vizu.onNewBead(event);
         button.disabled = false;
     }
@@ -529,7 +527,7 @@ function main() {
 	stage.mouseControls.remove("clickPick-left");
 
     let buttons = document.getElementsByClassName("new-bead");
-    for (button of buttons) {
+    for (const button of buttons) {
         button.disabled = true;
     }
 }
