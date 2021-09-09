@@ -6,7 +6,7 @@ class Bead {
 
 	indexOf(atom) {
 	    if (this.atoms.length > 0) {
-            for (var i=0; i < this.atoms.length; i++) {
+            for (let i=0; i < this.atoms.length; i++) {
                 if (this.atoms[i].index == atom.index) {
                     return i;
                 }
@@ -22,7 +22,7 @@ class Bead {
 	}
 
 	removeAtom(atom) {
-	    var atomIndex = this.indexOf(atom);
+	    let atomIndex = this.indexOf(atom);
 	    if (atomIndex >= 0) {
 	        this.atoms.splice(atomIndex, 1);
 	    }
@@ -63,8 +63,8 @@ class Bead {
 	}
 
 	get center() {
-	    var mass = 0;
-	    var position = new NGL.Vector3(0, 0, 0);
+	    let mass = 0;
+	    let position = new NGL.Vector3(0, 0, 0);
 	    for (atom of this.atoms) {
 	        mass += 1;
 	        position.add(atom.positionToVector3());
@@ -84,7 +84,7 @@ class BeadCollection {
     }
 
     newBead () {
-        var bead = new Bead();
+        let bead = new Bead();
         this._largestIndex += 1;
         bead.name = 'B' + this._largestIndex;
         this._beads.push(bead);
@@ -117,7 +117,7 @@ class Vizualization {
         this.stage = stage;
         this.shapeComp = null;
         this.showCG = false;
-        var toggleCG = document.getElementById('toggle-cg');
+        let toggleCG = document.getElementById('toggle-cg');
         toggleCG.onclick = (event) => this.onToggleCG(event);
         toggleCG.disabled = false;
         document.getElementById('dl-ndx').onclick = (event) => {
@@ -152,7 +152,7 @@ class Vizualization {
             },
         );
 
-        var buttons = document.getElementsByClassName("toggle-aa-labels");
+        let buttons = document.getElementsByClassName("toggle-aa-labels");
         for (button of buttons) {
             button.disabled = false;
             button.onclick = (event) => this.onToggleAALabels(event);
@@ -165,14 +165,15 @@ class Vizualization {
     }
 
     onToggleAALabels(event) {
-        var visible = ! this.aa_labels.visible;
+        let visible = ! this.aa_labels.visible;
         this.aa_labels.setVisibility(visible);
+        let text = '';
         if (visible) {
-            var text = 'Hide labels';
+            text = 'Hide labels';
         } else {
-            var text = 'Show labels';
+            text = 'Show labels';
         }
-        var buttons = document.getElementsByClassName("toggle-aa-labels");
+        let buttons = document.getElementsByClassName("toggle-aa-labels");
         for (button of buttons) {
             button.textContent = text;
         }
@@ -194,10 +195,10 @@ class Vizualization {
 
 	onBeadSelected(event) {
 	    if (! event.target.classList.contains('bead-name')) {
-            var realTarget = findParentWithClass(event.target, "bead-view");
-            var nodes = document.getElementById("bead-list").childNodes;
-            var index = 0;
-            var child;
+            let realTarget = findParentWithClass(event.target, "bead-view");
+            let nodes = document.getElementById("bead-list").childNodes;
+            let index = 0;
+            let child;
             for (child of nodes) {
                 if (child === realTarget) {
                     this.collection.selectBead(index);
@@ -209,11 +210,11 @@ class Vizualization {
 	}
 
 	onBeadRemove(event) {
-        var realTarget = findParentWithClass(event.target, "bead-view");
-        var nodes = document.getElementById("bead-list").childNodes;
-        var index = 0;
-        var child;
-        var selected = -1;
+        let realTarget = findParentWithClass(event.target, "bead-view");
+        let nodes = document.getElementById("bead-list").childNodes;
+        let index = 0;
+        let child;
+        let selected = -1;
         for (child of nodes) {
             if (child === realTarget) {
                 selected = index;
@@ -235,10 +236,10 @@ class Vizualization {
     }
 
     onNameChange(event) {
-        var realTarget = findParentWithClass(event.target, "bead-view");
-        var nodes = document.getElementById("bead-list").childNodes;
-        var index = 0;
-        var child;
+        let realTarget = findParentWithClass(event.target, "bead-view");
+        let nodes = document.getElementById("bead-list").childNodes;
+        let index = 0;
+        let child;
         for (child of nodes) {
             if (child === realTarget) {
                 this.collection.beads[index].name = event.target.value;
@@ -250,8 +251,8 @@ class Vizualization {
 
 	selectionString(bead) {
         if (bead.atoms.length > 0) {
-            var sel = "@";
-            for (var i=0; i < bead.atoms.length; i++) {
+            let sel = "@";
+            for (let i=0; i < bead.atoms.length; i++) {
                 if (sel != '@') {
                     sel = sel + ',';
                 }
@@ -270,7 +271,7 @@ class Vizualization {
     }
 
     updateSelection() {
-        var selString = this.selectionString(this.currentBead);
+        let selString = this.selectionString(this.currentBead);
         this.representation.setSelection(selString);
         this.clearBeadList();
         this.createBeadList();
@@ -278,21 +279,21 @@ class Vizualization {
     }
 
     createBeadListItem(bead) {
-        var textNode;
-        var list = document.getElementById("bead-list");
-        var item = document.createElement("li");
+        let textNode;
+        let list = document.getElementById("bead-list");
+        let item = document.createElement("li");
 
         // Remove button
-        var removeNode = document.createElement("button");
+        let removeNode = document.createElement("button");
         textNode = document.createTextNode("X");
         removeNode.appendChild(textNode);
         removeNode.onclick = (event) => this.onBeadRemove(event);
         item.appendChild(removeNode);
 
         // Name entry
-        var formNode = document.createElement("form");
+        let formNode = document.createElement("form");
         formNode.onsubmit = function() {return false};  // Prevent reload on "submission"
-        var nameNode = document.createElement("input");
+        let nameNode = document.createElement("input");
         nameNode.setAttribute("type", "text");
         nameNode.setAttribute("value", bead.name);
         nameNode.classList.add("bead-name");
@@ -301,10 +302,10 @@ class Vizualization {
         item.appendChild(formNode);
 
         // Atom list
-        var nameList = document.createElement("ul");
-        var subitem;
+        let nameList = document.createElement("ul");
+        let subitem;
         if (bead.atoms.length > 0) {
-            for (var i=0; i < bead.atoms.length; i++) {
+            for (let i=0; i < bead.atoms.length; i++) {
                 subitem = document.createElement("li");
                 textNode = document.createTextNode(bead.atoms[i].atomname);
                 subitem.appendChild(textNode);
@@ -323,46 +324,46 @@ class Vizualization {
     }
 
     createBeadList() {
-        for (var bead of this.collection.beads) {
+        for (let bead of this.collection.beads) {
             this.createBeadListItem(bead);
         }
     }
 
     clearBeadList() {
-        var list = document.getElementById('bead-list');
+        let list = document.getElementById('bead-list');
         while (list.lastChild) {
             list.removeChild(list.lastChild);
         }
     }
 
     updateNDX() {
-        var displayNode = document.getElementById('ndx-output');
+        let displayNode = document.getElementById('ndx-output');
         displayNode.textContent = generateNDX(this.collection);
     }
 
     updateMap() {
-        var displayNode = document.getElementById('map-output');
+        let displayNode = document.getElementById('map-output');
         displayNode.textContent = generateMap(this.collection);
     }
 
     updateGRO() {
-        var displayNode = document.getElementById('gro-output');
+        let displayNode = document.getElementById('gro-output');
         displayNode.textContent = generateGRO(this.collection);
     }
 
     drawCG() {
-        var normalColor = [0.58, 0.79, 0.66];
-        var selectedColor = [0.25, 0.84, 0.96];
-        var color = normalColor;
-        var opacity = 0.2;
+        let normalColor = [0.58, 0.79, 0.66];
+        let selectedColor = [0.25, 0.84, 0.96];
+        let color = normalColor;
+        let opacity = 0.2;
         if (this.showCG) {
             opacity = 1;
         }
         if (this.shapeComp != null) {
             this.stage.removeComponent(this.shapeComp);
         }
-        var shape = new NGL.Shape("shape");
-        for (var bead of this.collection.beads) {
+        let shape = new NGL.Shape("shape");
+        for (let bead of this.collection.beads) {
             color = normalColor;
             if (bead === this.currentBead) {
                 color = selectedColor;
@@ -378,7 +379,7 @@ class Vizualization {
 
 
 function findParentWithClass(element, className) {
-    var node = element;
+    let node = element;
     while (node) {
         if (node.classList.contains(className)) {
             return node;
@@ -390,7 +391,7 @@ function findParentWithClass(element, className) {
 
 
 function generateNDX(collection) {
-    var ndx = "";
+    let ndx = "";
     for (bead of collection.beads) {
         ndx += "[ " + bead.name + " ]\n";
         for (atom of bead.atoms) {
@@ -403,11 +404,11 @@ function generateNDX(collection) {
 
 
 function generateMap(collection) {
-    var output = "[ to ]\nmartini\n\n[ martini ]\n";
-    var atomToBeads = {};
-    var atoms = [];
-    var atomname;
-    var index;
+    let output = "[ to ]\nmartini\n\n[ martini ]\n";
+    let atomToBeads = {};
+    let atoms = [];
+    let atomname;
+    let index;
     for (bead of collection.beads) {
         output += bead.name + " ";
         for (atom of bead.atoms) {
@@ -438,16 +439,16 @@ function generateMap(collection) {
 
 
 function generateGRO(collection) {
-    var resid = "    0";
-    var resname = "";
-    var atomname = "    0";
-    var atomid = 0;
-    var x;
-    var y;
-    var z;
-    var center;
-    var output = "Generated with cgbuilder\n" + collection.beads.length + "\n";
-    var counter = 0;
+    let resid = "    0";
+    let resname = "";
+    let atomname = "    0";
+    let atomid = 0;
+    let x;
+    let y;
+    let z;
+    let center;
+    let output = "Generated with cgbuilder\n" + collection.beads.length + "\n";
+    let counter = 0;
     for (bead of collection.beads) {
         counter += 1;
         resid = new String(bead.resid).padStart(5);
@@ -466,7 +467,7 @@ function generateGRO(collection) {
 
 /* Taken from <https://ourcodeworld.com/articles/read/189/how-to-create-a-file-and-generate-a-download-with-javascript-in-the-browser-without-a-server> */
 function download(filename, text) {
-  var element = document.createElement('a');
+  let element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
   element.setAttribute('download', filename);
 
@@ -484,11 +485,11 @@ function loadMolecule(event, stage) {
     stage.removeAllComponents();
     stage.signals.clicked.removeAll();
     // Setup the model
-    var collection = new BeadCollection();
+    let collection = new BeadCollection();
     // Setup the interface
-    var vizu = new Vizualization(collection, stage);
+    let vizu = new Vizualization(collection, stage);
     // Load the molecule
-    var input = event.target.files[0]
+    let input = event.target.files[0]
 	stage.loadFile(input).then(function (component) {
 	    component.addRepresentation("ball+stick");
 	    component.autoView();
@@ -497,7 +498,7 @@ function loadMolecule(event, stage) {
 	    vizu.updateSelection();
 	});
     // Bing the new bead buttons.
-    var buttons = document.getElementsByClassName("new-bead");
+    let buttons = document.getElementsByClassName("new-bead");
     for (button of buttons) {
         button.onclick = (event) => vizu.onNewBead(event);
         button.disabled = false;
@@ -511,14 +512,14 @@ function loadMolecule(event, stage) {
 
 function main() {
     // Create NGL Stage object
-    var stage = new NGL.Stage( "viewport" );
+    let stage = new NGL.Stage( "viewport" );
 
     // Handle window resizing
     window.addEventListener( "resize", function( event ){
         stage.handleResize();
     }, false );
 
-	var mol_select = document.getElementById("mol-select");
+	let mol_select = document.getElementById("mol-select");
 	mol_select.onchange = (event) => loadMolecule(event, stage);
 	
 	// Remove preset action on atom pick.
@@ -527,7 +528,7 @@ function main() {
 	// behavior was linked on shift-click, instead.
 	stage.mouseControls.remove("clickPick-left");
 
-    var buttons = document.getElementsByClassName("new-bead");
+    let buttons = document.getElementsByClassName("new-bead");
     for (button of buttons) {
         button.disabled = true;
     }
