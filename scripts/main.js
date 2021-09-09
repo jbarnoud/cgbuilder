@@ -110,7 +110,7 @@ class BeadCollection {
 }
 
 
-class Vizualization {
+class Visualization {
     constructor(collection, stage) {
         this.collection = collection;
         this.representation = null;
@@ -180,13 +180,13 @@ class Vizualization {
     }
 
     onClick(pickingProxy) {
-    	// pickingProxy is only defined if the click is on an atom.
-    	//We do not want to do anything if tere is no atom selected.
-    	if (pickingProxy && pickingProxy.atom) {
-			this.currentBead.toggleAtom(pickingProxy.atom);
+        // pickingProxy is only defined if the click is on an atom.
+        // We do not want to do anything if there is no atom selected.
+        if (pickingProxy && pickingProxy.atom) {
+            this.currentBead.toggleAtom(pickingProxy.atom);
             this.updateSelection();
-		}
-	}
+        }
+    }
 
 	onNewBead(event) {
 	    this.collection.newBead();
@@ -485,7 +485,7 @@ function loadMolecule(event, stage) {
     // Setup the model
     let collection = new BeadCollection();
     // Setup the interface
-    let vizu = new Vizualization(collection, stage);
+    let vizu = new Visualization(collection, stage);
     // Load the molecule
     let input = event.target.files[0]
 	stage.loadFile(input).then(function (component) {
@@ -501,7 +501,7 @@ function loadMolecule(event, stage) {
         button.onclick = (event) => vizu.onNewBead(event);
         button.disabled = false;
     }
-	// Bind our own selection beheviour.
+	// Bind our own selection behaviour.
     // We need to use the "arrow" function so that `this` is defined and refer
     // to the right object in the `onClick` method. See
     // <https://stackoverflow.com/questions/20279484/how-to-access-the-correct-this-inside-a-callback>.
@@ -521,7 +521,7 @@ function main() {
 	mol_select.onchange = (event) => loadMolecule(event, stage);
 	
 	// Remove preset action on atom pick.
-	// As of NGL v2.0.0-dev.11, the left click atom pick is binded to the
+	// As of NGL v2.0.0-dev.11, the left click atom pick is bind to the
 	// centering of the view on the selected atom. In previous versions, this
 	// behavior was linked on shift-click, instead.
 	stage.mouseControls.remove("clickPick-left");
