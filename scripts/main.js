@@ -7,7 +7,7 @@ class Bead {
 	indexOf(atom) {
 	    if (this.atoms.length > 0) {
             for (let i=0; i < this.atoms.length; i++) {
-                if (this.atoms[i].index == atom.index) {
+                if (this.atoms[i].index === atom.index) {
                     return i;
                 }
             }
@@ -223,7 +223,7 @@ class Vizualization {
         }
         if (selected >= 0) {
             this.collection.removeBead(selected);
-            if (this.collection.beads.length == 0) {
+            if (this.collection.beads.length === 0) {
                 this.collection.newBead();
             }
             if (realTarget.classList.contains('selected-bead')) {
@@ -251,7 +251,7 @@ class Vizualization {
         if (bead.atoms.length > 0) {
             let sel = "@";
             for (let i=0; i < bead.atoms.length; i++) {
-                if (sel != '@') {
+                if (sel !== '@') {
                     sel = sel + ',';
                 }
                 sel = sel + bead.atoms[i].index;
