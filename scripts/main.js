@@ -167,7 +167,7 @@ class Visualization {
     onToggleAALabels(event) {
         let visible = ! this.aa_labels.visible;
         this.aa_labels.setVisibility(visible);
-        let text = '';
+        let text;
         if (visible) {
             text = 'Hide labels';
         } else {
@@ -198,7 +198,6 @@ class Visualization {
             let realTarget = findParentWithClass(event.target, "bead-view");
             let nodes = document.getElementById("bead-list").childNodes;
             let index = 0;
-            let child;
             for (const child of nodes) {
                 if (child === realTarget) {
                     this.collection.selectBead(index);
@@ -509,6 +508,16 @@ function loadMolecule(event, stage) {
 }
 
 function main() {
+    // Capture the wheel events within the viewer so the page does not scroll when we zoom in or out.
+    // <https://github.com/nglviewer/ngl/issues/878#issuecomment-913504711>
+    const stageContainer = document.getElementById('viewport');
+    function maybeScroll(event) {
+        if (stageContainer.contains(event.target)) {     // If wheel event occurred within the viewer
+            event.preventDefault();                      // prevent the default (scrolling the page)
+        }
+    }
+    window.addEventListener('wheel', maybeScroll, {passive: false});
+
     // Create NGL Stage object
     let stage = new NGL.Stage( "viewport" );
 
