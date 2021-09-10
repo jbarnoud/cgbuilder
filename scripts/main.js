@@ -107,6 +107,16 @@ class BeadCollection {
     selectBead(index) {
         this._current = this._beads[index];
     }
+
+    countBeadsForAtom(atom) {
+        let count = 0;
+        for (const bead of this.beads) {
+            if (bead.isAtomIn(atom)) {
+                count += 1;
+            }
+        }
+        return count;
+    }
 }
 
 
@@ -303,10 +313,18 @@ class Visualization {
         let subitem;
         if (bead.atoms.length > 0) {
             for (let i=0; i < bead.atoms.length; i++) {
+                let name = bead.atoms[i].atomname;
                 subitem = document.createElement("li");
-                textNode = document.createTextNode(bead.atoms[i].atomname);
+                textNode = document.createTextNode(name);
                 subitem.appendChild(textNode);
                 nameList.appendChild(subitem);
+                if (this.collection.countBeadsForAtom(bead.atoms[i]) > 1) {
+                    let shareitem = document.createElement("abbr")
+                    shareitem.title = "This atom is shared between multiple beads.";
+                    let sharetext = document.createTextNode('🔗');
+                    shareitem.appendChild(sharetext);
+                    subitem.appendChild(shareitem);
+                }
             }
         }
         item.appendChild(nameList);
